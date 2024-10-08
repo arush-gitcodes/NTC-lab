@@ -1,0 +1,17 @@
+def gcd_recursive(a, b):
+    # Base case: if b is zero, return a
+    if b == 0:
+        return abs(a)
+    # Recursive case: gcd(a, b) = gcd(b, a % b)
+    return gcd_recursive(b, a % b)
+
+if __name__ == "__main__":
+    # Get user input
+    num1 = int(input("Enter the first integer: "))
+    num2 = int(input("Enter the second integer: "))
+    
+    # Compute the GCD using the recursive function
+    result = gcd_recursive(num1, num2)
+    
+    # Display the result
+    print(f"The GCD of {num1} and {num2} is: {result}")
