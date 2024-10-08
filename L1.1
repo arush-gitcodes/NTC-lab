@@ -1,0 +1,22 @@
+def gcd(a, b):
+    # Base case: if b is zero, return a
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def gcd_list(numbers):
+    # Compute GCD of a list of numbers by iterating through the list
+    result = numbers[0]
+    for num in numbers[1:]:
+        result = gcd(result, num)
+    return result
+
+if __name__ == "__main__":
+    # Get the list of integers from the user
+    numbers = list(map(int, input("Enter integers separated by spaces: ").split()))
+    
+    # Compute the GCD of the list
+    result = gcd_list(numbers)
+    
+    # Display the result
+    print(f"The GCD of the list {numbers} is: {result}")
