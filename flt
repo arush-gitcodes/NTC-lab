@@ -1,0 +1,45 @@
+
+def modular_exponentiation(base, exponent, mod):
+    result = 1
+    base = base % mod  # Handle base greater than mod
+    while exponent > 0:
+        # If exponent is odd, multiply base with result
+        if exponent % 2 == 1:
+            result = (result * base) % mod
+        # Exponent must be even now
+        exponent = exponent >> 1  # exponent = exponent // 2
+        base = (base * base) % mod  # Change base to base^2
+    return result
+
+def is_prime(number):
+    if number <= 1:
+        return False
+    if number <= 3:
+        return True
+    if number % 2 == 0 or number % 3 == 0:
+        return False
+    i = 5
+    while i * i <= number:
+        if number % i == 0 or number % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+def verify_fermats_little_theorem(a, p):
+    # p should be a prime number
+    if p <= 1 or not is_prime(p):
+        raise ValueError("p must be a prime number greater than 1.")
+    
+    # Fermat's Little Theorem: a^(p-1) % p should be 1
+    result = modular_exponentiation(a, p - 1, p)
+    return result == 1
+
+if __name__ == "__main__":
+    a = int(input("Enter the integer a: "))
+    p = int(input("Enter the prime number p: "))
+    
+    try:
+        result = verify_fermats_little_theorem(a, p)
+        print(f"Fermat's Little Theorem holds: {result}")
+    except ValueError as e:
+        print(e)
