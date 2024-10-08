@@ -1,0 +1,32 @@
+def encrypt(plain_text, key):
+    cipher_text = []
+    for ch in plain_text:
+        if ch.isalpha():  # Check if the character is a letter
+            shifted = chr(((ord(ch) - ord('a') + key) % 26) + ord('a'))
+            cipher_text.append(shifted)
+        else:
+            cipher_text.append(ch)
+    return ''.join(cipher_text)
+
+def decrypt(cipher_text, key):
+    plain_text = []
+    for ch in cipher_text:
+        if ch.isalpha():  # Check if the character is a letter
+            shifted = chr(((ord(ch) - ord('a') - key + 26) % 26) + ord('a'))
+            plain_text.append(shifted)
+        else:
+            plain_text.append(ch)
+    return ''.join(plain_text)
+
+if __name__ == "__main__":
+    plain_text = input("Enter the text to encrypt: ")
+    key = int(input("Enter the key (a number from 1 to 25): "))
+    
+    encrypted_text = encrypt(plain_text, key)
+    print("Encrypted text:", encrypted_text)
+    
+    cipher_text = input("Enter the text to decrypt: ")
+    key = int(input("Enter the key (a number from 1 to 25): "))
+    
+    decrypted_text = decrypt(cipher_text, key)
+    print("Decrypted text:", decrypted_text)
