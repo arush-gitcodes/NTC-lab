@@ -1,0 +1,21 @@
+def gcd(a, b):
+    # Ensure the numbers are non-negative
+    a = abs(a)
+    b = abs(b)
+
+    # Base case: if b is zero, gcd is a
+    while b != 0:
+        a, b = b, a % b
+    
+    return a
+
+if __name__ == "__main__":
+    # Get user input
+    num1 = int(input("Enter the first integer: "))
+    num2 = int(input("Enter the second integer: "))
+    
+    # Compute the GCD
+    result = gcd(num1, num2)
+    
+    # Display the result
+    print(f"The GCD of {num1} and {num2} is: {result}")
