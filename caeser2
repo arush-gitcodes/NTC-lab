@@ -1,0 +1,32 @@
+def read_from_file(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
+
+def write_to_file(file_path, content):
+    with open(file_path, 'w') as file:
+        file.write(content)
+
+def encrypt(plain_text, key):
+    cipher_text = []
+    for char in plain_text:
+        if char.isalpha():
+            shift = ord(char) + key
+            if char.islower():
+                shift = ord('a') + (shift - ord('a')) % 26
+            elif char.isupper():
+                shift = ord('A') + (shift - ord('A')) % 26
+            cipher_text.append(chr(shift))
+        else:
+            cipher_text.append(char)
+    return ''.join(cipher_text)
+
+if __name__ == "__main__":
+    input_file_path = 'input.txt'
+    output_file_path = 'output.txt'
+    key = 3  # You can change the shift value here
+
+    plain_text = read_from_file(input_file_path)
+    encrypted_text = encrypt(plain_text, key)
+    write_to_file(output_file_path, encrypted_text)
+    
+    print("Encryption successful. Check the output file.")
