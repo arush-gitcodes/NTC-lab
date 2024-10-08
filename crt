@@ -1,0 +1,48 @@
+def mod_inverse(a, m):
+    m0, x0, x1 = m, 0, 1
+    if m == 1:
+        return 0
+    while a > 1:
+        q = a // m
+        a, m = m, a % m
+        x0, x1 = x1 - q * x0, x0
+    if x1 < 0:
+        x1 += m0
+    return x1
+
+def chinese_remainder(num, rem):
+    if len(num) != len(rem):
+        raise ValueError("The number of elements in num[] and rem[] must be the same.")
+
+    # Calculate the product of all num[] elements
+    product = 1
+    for value in num:
+        product *= value
+
+    # Compute the result using the Chinese Remainder Theorem
+    result = 0
+    for i in range(len(num)):
+        pp = product // num[i]
+        result += rem[i] * mod_inverse(pp, num[i]) * pp
+        result %= product
+
+    return result
+
+if __name__ == "__main__":
+    # Get the number of congruences from the user
+    n = int(input("Enter the number of congruences: "))
+    
+    # Create arrays for the coefficients (num) and remainders (rem)
+    num = []
+    rem = []
+    
+    print("Enter the values for a (coefficient) and m (modulus) for each congruence:")
+    for i in range(n):
+        a = int(input(f"a{i+1}: "))
+        m = int(input(f"m{i+1}: "))
+        num.append(a)
+        rem.append(m)
+    
+    # Compute and display the result
+    result = chinese_remainder(num, rem)
+    print(f"The solution for the system of linear congruences is: {result}")
