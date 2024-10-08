@@ -1,0 +1,56 @@
+def extended_gcd(a, b, x, y):
+    # Base case: if b is zero, the GCD is a, and x = 1, y = 0
+    if b == 0:
+        x[0] = 1
+        y[0] = 0
+        return a
+    
+    # Create temporary arrays to hold the recursive results
+    x1 = [0]
+    y1 = [0]
+    
+    # Recursive case: a = b * q + r
+    gcd = extended_gcd(b, a % b, x1, y1)
+    
+    # Update x and y using the results of the recursive call
+    x[0] = y1[0]
+    y[0] = x1[0] - (a // b) * y1[0]
+    
+    return gcd
+
+def find_all_solutions(a, b, c, k_range):
+    x = [0]
+    y = [0]
+    
+    # Find the GCD of a and b, and coefficients x and y
+    gcd = extended_gcd(a, b, x, y)
+    
+    # Check if the equation ax + by = c has a solution
+    if c % gcd != 0:
+        print("No solution exists for the equation.")
+        return
+    
+    # Scale the particular solution to fit the equation ax + by = c
+    x[0] *= c // gcd
+    y[0] *= c // gcd
+    
+    # Display the particular solution
+    print(f"A particular solution to {a}x + {b}y = {c} is: x = {x[0]}, y = {y[0]}")
+    
+    # General solution formula:
+    print("\nGeneral solutions for different values of k:")
+    
+    for k in range(-k_range, k_range + 1):
+        x_k = x[0] + k * (b // gcd)
+        y_k = y[0] - k * (a // gcd)
+        print(f"For k = {k}: x = {x_k}, y = {y_k}")
+
+if __name__ == "__main__":
+    # Get user input for a, b, c, and range for k
+    a = int(input("Enter the coefficient a: "))
+    b = int(input("Enter the coefficient b: "))
+    c = int(input("Enter the constant c: "))
+    k_range = int(input("Enter the range value for k: "))
+    
+    # Find and display all solutions within the range
+    find_all_solutions(a, b, c, k_range)
