@@ -1,0 +1,76 @@
+class Group:
+    def __init__(self, elements):
+        self.elements = elements
+
+    # Check if an element is in the group
+    def contains(self, element):
+        return element in self.elements
+
+    # Closure property
+    def is_closed_under_operation(self):
+        for a in self.elements:
+            for b in self.elements:
+                if (a + b) not in self.elements:
+                    return False
+        return True
+
+    # Associativity property
+    def is_associative(self):
+        for a in self.elements:
+            for b in self.elements:
+                for c in self.elements:
+                    if (a + (b + c)) != ((a + b) + c):
+                        return False
+        return True
+
+    # Identity element
+    def get_identity_element(self):
+        for e in self.elements:
+            is_identity = True
+            for a in self.elements:
+                if (e + a) != a or (a + e) != a:
+                    is_identity = False
+                    break
+            if is_identity:
+                return e
+        return None
+
+    # Inverse element
+    def has_inverse_element(self):
+        identity = self.get_identity_element()
+        if identity is None:
+            return False
+        for a in self.elements:
+            has_inverse = False
+            for b in self.elements:
+                if (a + b) == identity:
+                    has_inverse = True
+                    break
+            if not has_inverse:
+                return False
+        return True
+
+    # Check if the structure is a group
+    def is_group(self):
+        return self.is_closed_under_operation() and self.is_associative() and self.get_identity_element() is not None and self.has_inverse_element()
+
+
+if __name__ == "__main__":
+    elements = set()
+
+    # Input the elements for the group
+    print("Enter the elements of the group (type 'done' to finish):")
+    while True:
+        try:
+            elem = input()
+            if elem.lower() == 'done':
+                break
+            elements.add(int(elem))
+        except ValueError:
+            print("Invalid input. Enter integers or 'done' to finish.")
+
+    group = Group(elements)
+    if group.is_group():
+        print("The set forms a group under addition.")
+    else:
+        print("The set does not form a group under addition.")
