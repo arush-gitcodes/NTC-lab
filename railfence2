@@ -1,0 +1,80 @@
+def encrypt_rail_fence(text, rails):
+    # Validate number of rails
+    if rails <= 1 or rails >= len(text):
+        return text  # No encryption needed if rails are inappropriate
+
+    # Initialize the rail matrix
+    rail = [['' for _ in range(len(text))] for _ in range(rails)]
+    down = False
+    row, col = 0, 0
+
+    # Fill the rail matrix in a zig-zag pattern
+    for char in text:
+        rail[row][col] = char
+        col += 1
+
+        # Change direction at the top and bottom rails
+        if row == 0 or row == rails - 1:
+            down = not down
+        row += 1 if down else -1
+
+    # Read the matrix row by row to get the encrypted text
+    encrypted_text = []
+    for i in range(rails):
+        for j in range(len(text)):
+            if rail[i][j] != '':
+                encrypted_text.append(rail[i][j])
+
+    return ''.join(encrypted_text)
+
+
+def decrypt_rail_fence(ciphertext, rails):
+    # Validate number of rails
+    if rails <= 1 or rails >= len(ciphertext):
+        return ciphertext  # No decryption needed if rails are inappropriate
+
+    # Initialize the rail matrix with placeholders
+    rail = [['' for _ in range(len(ciphertext))] for _ in range(rails)]
+    down = None
+    row, col = 0, 0
+
+    # Mark positions with placeholders ('*')
+    for char in ciphertext:
+        rail[row][col] = '*'
+        col += 1
+
+        if row == 0 or row == rails - 1:
+            down = not down
+        row += 1 if down else -1
+
+    # Fill the rail matrix with characters from ciphertext
+    index = 0
+    for i in range(rails):
+        for j in range(len(ciphertext)):
+            if rail[i][j] == '*' and index < len(ciphertext):
+                rail[i][j] = ciphertext[index]
+                index += 1
+
+    # Read the matrix in a zig-zag pattern to get the decrypted text
+    decrypted_text = []
+    row, col = 0, 0
+    for _ in range(len(ciphertext)):
+        decrypted_text.append(rail[row][col])
+        col += 1
+
+        if row == 0 or row == rails - 1:
+            down = not down
+        row += 1 if down else -1
+
+    return ''.join(decrypted_text)
+
+
+# Example usage
+message = input("Enter the message: ")
+rails = int(input("Enter the number of rails: "))
+
+encrypted_message = encrypt_rail_fence(message, rails)
+print("Encrypted message:", encrypted_message)
+
+decrypted_message = decrypt_rail_fence(encrypted_message, rails)
+print("Decrypted message:", decrypted_message)
