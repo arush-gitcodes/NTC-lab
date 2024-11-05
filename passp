@@ -1,0 +1,36 @@
+import random
+
+def generate_playfair_key(passphrase):
+    # Prepare the initial key string with the passphrase (uppercase and remove duplicates)
+    passphrase = passphrase.upper().replace("J", "I")
+    key_string = remove_duplicates(passphrase + "ABCDEFGHIKLMNOPQRSTUVWXYZ")  # 'J' is replaced with 'I' in Playfair
+    
+    # Randomize the key string
+    key_list = list(key_string)
+    random.shuffle(key_list)
+    key_string = ''.join(key_list)
+
+    # Create a 5x5 matrix from the shuffled key string
+    key_matrix = [key_string[i:i+5] for i in range(0, 25, 5)]
+
+    return key_matrix
+
+def remove_duplicates(input_str):
+    result = []
+    for char in input_str:
+        if char not in result:
+            result.append(char)
+    return ''.join(result)
+
+def print_key_matrix(key_matrix):
+    print("Generated Playfair Key Matrix:")
+    for row in key_matrix:
+        print(" ".join(row))
+
+def main():
+    passphrase = input("Enter a passphrase for the Playfair cipher key: ")
+    key_matrix = generate_playfair_key(passphrase)
+    print_key_matrix(key_matrix)
+
+if __name__ == "__main__":
+    main()
