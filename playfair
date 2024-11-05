@@ -1,0 +1,59 @@
+PAD_CHAR = 'X'
+
+def main():
+    key = input("Enter the key: ").upper()
+    plaintext = input("Enter the plaintext: ").upper().replace("J", "I")  # Replace 'J' with 'I' for Playfair compatibility
+    matrix = generate_matrix(key)
+    encrypted_text = encrypt(plaintext, matrix)
+    print("Encrypted text:", encrypted_text)
+    decrypted_text = decrypt(encrypted_text, matrix)
+    print("Decrypted text:", decrypted_text)
+
+def encrypt(plaintext, matrix):
+    formatted_text = format_text(plaintext)
+    return process_text(formatted_text, matrix, encrypt=True)
+
+def decrypt(ciphertext, matrix):
+    decrypted_text = process_text(ciphertext, matrix, encrypt=False)
+    return decrypted_text.replace(PAD_CHAR, '')
+
+def generate_matrix(key):
+    key_no_duplicates = ''.join(dict.fromkeys(key + "ABCDEFGHIKLMNOPQRSTUVWXYZ"))  # Remove duplicates and skip 'J'
+    return [list(key_no_duplicates[i:i+5]) for i in range(0, 25, 5)]
+
+def format_text(text):
+    formatted_text = []
+    for i in range(len(text)):
+        formatted_text.append(text[i])
+        if i < len(text) - 1 and text[i] == text[i + 1]:
+            formatted_text.append(PAD_CHAR)
+    if len(formatted_text) % 2 != 0:
+        formatted_text.append(PAD_CHAR)
+    return ''.join(formatted_text)
+
+def process_text(text, matrix, encrypt):
+    processed_text = []
+    shift = 1 if encrypt else -1
+
+    for i in range(0, len(text), 2):
+        char1, char2 = text[i], text[i + 1]
+        row1, col1 = find_position(matrix, char1)
+        row2, col2 = find_position(matrix, char2)
+
+        if row1 == row2:  # Same row
+            processed_text.extend([matrix[row1][(col1 + shift) % 5], matrix[row2][(col2 + shift) % 5]])
+        elif col1 == col2:  # Same column
+            processed_text.extend([matrix[(row1 + shift) % 5][col1], matrix[(row2 + shift) % 5][col2]])
+        else:  # Rectangle
+            processed_text.extend([matrix[row1][col2], matrix[row2][col1]])
+
+    return ''.join(processed_text)
+
+def find_position(matrix, target):
+    for row, line in enumerate(matrix):
+        if target in line:
+            return row, line.index(target)
+    return None
+
+if __name__ == "__main__":
+    main()
