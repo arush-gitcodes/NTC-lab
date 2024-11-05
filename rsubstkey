@@ -1,0 +1,41 @@
+import random
+import string
+
+def generate_random_key():
+    alphabet = list(string.ascii_uppercase)
+    random.shuffle(alphabet)
+    return ''.join(alphabet)
+
+def encrypt_substitution_cipher(plaintext, key):
+    encrypted_text = []
+    for char in plaintext:
+        if char.isalpha():
+            base = 'A' if char.isupper() else 'a'
+            index = ord(char.upper()) - ord('A')
+            encrypted_char = key[index] if char.isupper() else key[index].lower()
+            encrypted_text.append(encrypted_char)
+        else:
+            encrypted_text.append(char)  # Keep non-letters as they are
+    return ''.join(encrypted_text)
+
+def decrypt_substitution_cipher(ciphertext, key):
+    decrypted_text = []
+    reverse_key = {key[i]: chr(i + ord('A')) for i in range(26)}
+    for char in ciphertext:
+        if char.isalpha():
+            decrypted_char = reverse_key[char.upper()]
+            decrypted_text.append(decrypted_char if char.isupper() else decrypted_char.lower())
+        else:
+            decrypted_text.append(char)
+    return ''.join(decrypted_text)
+
+# Example usage
+plaintext = "HELLO WORLD"
+random_key = generate_random_key()
+print(f"Random Key: {random_key}")
+
+encrypted_text = encrypt_substitution_cipher(plaintext, random_key)
+print(f"Encrypted Text: {encrypted_text}")
+
+decrypted_text = decrypt_substitution_cipher(encrypted_text, random_key)
+print(f"Decrypted Text: {decrypted_text}")
