@@ -1,0 +1,21 @@
+def crack_caesar_cipher(ciphertext):
+    for shift in range(26):
+        decrypted_text = decrypt(ciphertext, shift)
+        print(f"Shift {shift}: {decrypted_text}")
+
+def decrypt(text, shift):
+    result = []
+    for c in text:
+        if c.isalpha():
+            base = ord('A') if c.isupper() else ord('a')
+            c = chr((ord(c) - base - shift + 26) % 26 + base)
+        result.append(c)
+    return ''.join(result)
+
+def main():
+    # Example ciphertext
+    ciphertext = "JGNNQ YQTNF"
+    crack_caesar_cipher(ciphertext)
+
+if __name__ == "__main__":
+    main()
