@@ -1,0 +1,36 @@
+import math
+
+def encrypt(plain_text, column_order):
+    rows = math.ceil(len(plain_text) / len(column_order))
+    transposition_matrix = [['X'] * len(column_order) for _ in range(rows)]
+    index = 0
+
+    # Fill the matrix row-wise
+    for i in range(rows):
+        for j in range(len(column_order)):
+            if index < len(plain_text):
+                transposition_matrix[i][j] = plain_text[index]
+                index += 1
+            else:
+                transposition_matrix[i][j] = 'X'  # Padding with 'X' for incomplete cells
+
+    # Sort the columns based on the column order
+    sorted_column_order = sorted(column_order)
+    encrypted_text = []
+
+    # Build the encrypted text by reading the matrix column-wise based on sorted column order
+    for ch in sorted_column_order:
+        column_index = column_order.index(ch)
+        for i in range(rows):
+            encrypted_text.append(transposition_matrix[i][column_index])
+
+    return ''.join(encrypted_text)
+
+def main():
+    plain_text = input("Enter the text to encrypt: ")
+    column_order = input("Enter the key (a string representing the column order): ")
+    encrypted_text = encrypt(plain_text, column_order)
+    print("Encrypted text:", encrypted_text)
+
+if __name__ == "__main__":
+    main()
