@@ -26,6 +26,33 @@ def encrypt(plain_text, column_order):
 
     return ''.join(encrypted_text)
 
+def decrypt(encrypted_text, column_order):
+    columns = len(column_order)
+    rows = math.ceil(len(encrypted_text) / columns)
+    
+    # Calculate the order in which to read columns based on the sorted key
+    sorted_column_order = sorted([(ch, i) for i, ch in enumerate(column_order)])
+    column_indices = [index for _, index in sorted_column_order]
+    
+    # Create an empty matrix to hold the characters
+    transposition_matrix = [[''] * columns for _ in range(rows)]
+    index = 0
+    
+    # Fill the matrix column by column according to the sorted order
+    for col in column_indices:
+        for row in range(rows):
+            if index < len(encrypted_text):
+                transposition_matrix[row][col] = encrypted_text[index]
+                index += 1
+
+    # Read the matrix row by row to get the decrypted text
+    decrypted_text = []
+    for row in transposition_matrix:
+        decrypted_text.extend(row)
+
+    # Join all characters and remove padding if any
+    return ''.join(decrypted_text).rstrip('X')  # Removing padding 'X'
+
 def main():
     plain_text = input("Enter the text to encrypt: ")
     column_order = input("Enter the key (a string representing the column order): ")
